@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'success_screen.dart'; // Import for navigation
-
+String avatar = '';
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
@@ -16,6 +16,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _dobController = TextEditingController();
   bool _isPasswordVisible = false;
   bool _isLoading = false;
+  //String avatar = '';
 
   @override
   void dispose() {
@@ -26,6 +27,14 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
+  // Avatar Selector Function
+  selectAvatar(String imageLink) {
+    setState((){
+      avatar == imageLink;
+    });
+
+    
+  }
   // Date Picker Function
   Future<void> _selectDate() async {
     DateTime? picked = await showDatePicker(
@@ -202,6 +211,69 @@ class _SignupScreenState extends State<SignupScreen> {
                     }
                     return null;
                   },
+                ),
+                
+                Text('Choose your avatar!'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:[
+                    GestureDetector(
+                      onTap: () {
+                        selectAvatar('https://tse1.mm.bing.net/th/id/OIP.gvg2MUErtAOi4RGwFzMqDQHaFj?rs=1&pid=ImgDetMain&o=7&rm=3');
+                        },
+                      child: Padding(padding: const EdgeInsets.all(8.0),
+                        child: Image.network('https://tse1.mm.bing.net/th/id/OIP.gvg2MUErtAOi4RGwFzMqDQHaFj?rs=1&pid=ImgDetMain&o=7&rm=3',
+                        width: 100,
+                        height: 100)
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        selectAvatar('https://tse1.mm.bing.net/th/id/OIP.3-CyEwZ0GAgNkdBooxq2ZAHaE8?rs=1&pid=ImgDetMain&o=7&rm=3');
+                        },
+                      child: Padding(padding: const EdgeInsets.all(8.0),
+                        child: Image.network('https://tse1.mm.bing.net/th/id/OIP.3-CyEwZ0GAgNkdBooxq2ZAHaE8?rs=1&pid=ImgDetMain&o=7&rm=3',
+                        width: 100,
+                        height: 100)
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        selectAvatar('https://th.bing.com/th/id/R.40f3b8a2eeb44ac9e74602622050fd55?rik=xE6MOemlfB7aZQ&riu=http%3a%2f%2f4.bp.blogspot.com%2f-zlrl70iAke0%2fUiEUN960JdI%2fAAAAAAAAAb4%2f_4mdLtwmDUU%2fs1600%2fIguana-wallpapers.jpg&ehk=efa3CfuGNDTSab8X4AlihvHSYyqMf79CgeHmIP57TB4%3d&risl=&pid=ImgRaw&r=0');
+                        },
+                      child: Padding(padding: const EdgeInsets.all(8.0),
+                        child: Image.network('https://th.bing.com/th/id/R.40f3b8a2eeb44ac9e74602622050fd55?rik=xE6MOemlfB7aZQ&riu=http%3a%2f%2f4.bp.blogspot.com%2f-zlrl70iAke0%2fUiEUN960JdI%2fAAAAAAAAAb4%2f_4mdLtwmDUU%2fs1600%2fIguana-wallpapers.jpg&ehk=efa3CfuGNDTSab8X4AlihvHSYyqMf79CgeHmIP57TB4%3d&risl=&pid=ImgRaw&r=0',
+                        width: 100,
+                        height: 100,
+                        )
+                      ),
+                    ),               
+                  ]
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        selectAvatar('https://cdn.pixabay.com/photo/2024/02/28/07/42/european-shorthair-8601492_1280.jpg');
+                        },
+                      child: Padding(padding: const EdgeInsets.all(8.0),
+                        child: Image.network('https://cdn.pixabay.com/photo/2024/02/28/07/42/european-shorthair-8601492_1280.jpg',                        
+                        width: 100,
+                        height: 100)
+                      ),
+                    ), 
+                    GestureDetector(
+                      onTap: () {
+                        selectAvatar('https://th.bing.com/th/id/R.cd68cba8680e3406758fdbf33cf67a15?rik=gHIJ3UMneL3lOw&riu=http%3a%2f%2fwallup.net%2fwp-content%2fuploads%2f2016%2f01%2f201579-animals-fish-sea-shark.jpg&ehk=xm4MS4jP%2fD5IVHtnf1JjiZWggkbHRn2pjtzwBMbjAwA%3d&risl=&pid=ImgRaw&r=0');
+                        },
+                      child: Padding(padding: const EdgeInsets.all(8.0),
+                        child: Image.network('https://th.bing.com/th/id/R.cd68cba8680e3406758fdbf33cf67a15?rik=gHIJ3UMneL3lOw&riu=http%3a%2f%2fwallup.net%2fwp-content%2fuploads%2f2016%2f01%2f201579-animals-fish-sea-shark.jpg&ehk=xm4MS4jP%2fD5IVHtnf1JjiZWggkbHRn2pjtzwBMbjAwA%3d&risl=&pid=ImgRaw&r=0',
+                        width: 100,
+                        height: 100)
+                      ),
+                    ),               
+                  ],
                 ),
                 const SizedBox(height: 30),
 

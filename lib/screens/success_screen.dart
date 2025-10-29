@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:confetti/confetti.dart';
+import 'signup_screen.dart';
 
 class SuccessScreen extends StatefulWidget {
   final String userName;
@@ -99,6 +100,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
                     ],
                     totalRepeatCount: 1,
                   ),
+                  Image.network(avatar),
 
                   const SizedBox(height: 20),
                   const Text(
