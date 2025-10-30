@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'success_screen.dart'; // Import for navigation
+
 String avatar = '';
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -16,7 +17,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _dobController = TextEditingController();
   bool _isPasswordVisible = false;
   bool _isLoading = false;
-  //String avatar = '';
+  double passwordStrength = 0.0;
 
   @override
   void dispose() {
@@ -32,8 +33,50 @@ class _SignupScreenState extends State<SignupScreen> {
     setState((){
       avatar == imageLink;
     });
+  }
 
-    
+  // Password Strength Updater Function
+  updatePasswordStrength() {
+    setState((){
+      if (_passwordController.text.length < 6){
+        passwordStrength = 0;
+      } else{
+        switch(_passwordController.text.length){
+        case 6:
+        passwordStrength = 0;
+        break;
+        case 7:
+        passwordStrength = 0.16;
+        break;
+        case 8:
+        passwordStrength = 0.33;
+        break;
+        case 9:
+        passwordStrength = 0.5;
+        break;
+        case 10:
+        passwordStrength = 0.67;
+        break;
+        case 11:
+        passwordStrength = 0.83;
+        break;
+        case 12:
+        passwordStrength = 1;
+        break;
+        default:
+        passwordStrength = 1;
+        break;
+      }
+    }
+      
+    });             
+  }
+
+  Color passwordBarColor(passwordStrength){
+    if (passwordStrength > .5){
+      return Colors.green;}
+    else{
+      return Colors.red;}
   }
   // Date Picker Function
   Future<void> _selectDate() async {
@@ -179,6 +222,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 TextFormField(
                   controller: _passwordController,
                   obscureText: !_isPasswordVisible,
+                  onChanged: updatePasswordStrength(),
                   decoration: InputDecoration(
                     labelText: 'Secret Password',
                     prefixIcon:
@@ -276,7 +320,21 @@ class _SignupScreenState extends State<SignupScreen> {
                   ],
                 ),
                 const SizedBox(height: 30),
-
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    LinearProgressIndicator(              
+                      value: passwordStrength,
+                      backgroundColor: Colors.grey[300],
+                      color: passwordBarColor(passwordStrength) //Colors.purple,
+                    ),
+                    Text(
+                      "Password Strength: ${passwordStrength*100}"
+                    ),
+                  ]
+                ),
+                
+                SizedBox(height: 20,),
                 // Submit Button w/ Loading Animation
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),

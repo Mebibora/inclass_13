@@ -100,6 +100,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
                     ],
                     totalRepeatCount: 1,
                   ),
+                  
                   Image.network(avatar),
 
                   const SizedBox(height: 20),
