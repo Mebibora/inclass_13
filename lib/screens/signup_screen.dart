@@ -1,10 +1,11 @@
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'success_screen.dart'; // Import for navigation
 
 // global variables for displaying images in success_screen.dart
 String avatar = '';
 bool spmBadge = false;
-bool tebsBadge = true;
+bool tebsBadge = false;
 bool pcBadge = true;
 
 class SignupScreen extends StatefulWidget {
@@ -20,9 +21,26 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
+  
   bool _isPasswordVisible = false;
   bool _isLoading = false;
   double passwordStrength = 0.0;
+  double _progress = 0.0;
+  late ConfettiController _confettiController;
+  String _message = "Let's get started!";
+
+  @override
+  void initState() {
+    super.initState();
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 2));
+  
+
+  // Listen for text field changes
+    for (final controller in {_nameController, _emailController, _passwordController, _dobController}) {
+      controller.addListener(_updateProgress);
+    }
+  }
 
   @override
   void dispose() {
@@ -33,10 +51,41 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
+  /// Updates progress based on how many fields are non-empty
+  void _updateProgress() {
+    final filledCount =
+        {_nameController, _emailController, _passwordController, _dobController}.where((c) => c.text.trim().isNotEmpty).length;
+    final total = {_nameController, _emailController, _passwordController, _dobController}.length;
+    final newProgress = filledCount / total;
+
+    if (newProgress != _progress) {
+      setState(() => _progress = newProgress);
+      _checkMilestone(newProgress);
+    }
+  }
+
+  void _checkMilestone(double progress) {
+    if (progress == 0.25) {
+      _showCelebration("Great start! 🎉 You’re 25% done!");
+    } else if (progress == 0.5) {
+      _showCelebration("Halfway there! 🚀");
+    } else if (progress == 0.75) {
+      _showCelebration("Almost done! 🌟 Keep it up!");
+    } else if (progress == 1.0) {
+      _showCelebration("You did it! 🏆 All done!");
+      tebsBadgetoggle();
+    }
+  }
+
+  void _showCelebration(String message) {
+    setState(() => _message = message);
+    _confettiController.play();
+  }
+
   // Avatar Selector Function
   selectAvatar(String imageLink) {
     setState((){
-      avatar == imageLink;
+      avatar = imageLink;
     });
   }
 
@@ -67,9 +116,11 @@ class _SignupScreenState extends State<SignupScreen> {
         break;
         case 12:
         passwordStrength = 1;
+        spmBadge = true;
         break;
         default:
         passwordStrength = 1;
+        spmBadge = true;
         break;
       }
     }
@@ -82,15 +133,6 @@ class _SignupScreenState extends State<SignupScreen> {
       return Colors.green;}
     else{
       return Colors.red;}
-  }
-  
-  // Function to check the badge for a strong password
-  spmBadgetoggle() {
-    if (passwordStrength == 1) {
-      spmBadge = true;
-    } else{
-      spmBadge = false;
-    }
   }
 
   // Function to check the badge for signing up in the morning
@@ -182,6 +224,53 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
+
+                // Progress bar
+                LinearProgressIndicator(
+                  value: _progress,
+                  minHeight: 12,
+                  backgroundColor: Colors.grey.shade300,
+                  color: Colors.blueAccent,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  '${(_progress * 100).toInt()}% Complete',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+
+                // Encouraging message
+                Center(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 400),
+                    child: Text(
+                      _message,
+                      key: ValueKey(_message),
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.w600),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+
+                Align(
+            alignment: Alignment.topCenter,
+            child: ConfettiWidget(
+              confettiController: _confettiController,
+              blastDirectionality: BlastDirectionality.explosive,
+              emissionFrequency: 0.05,
+              numberOfParticles: 20,
+              maxBlastForce: 15,
+              minBlastForce: 5,
+              colors: const [
+                Colors.blue,
+                Colors.pink,
+                Colors.orange,
+                Colors.green,
+                Colors.purple,
+              ],
+            ),
+          ),
 
                 // Name Field
                 _buildTextField(
@@ -281,10 +370,28 @@ class _SignupScreenState extends State<SignupScreen> {
                   },
                 ),
                 
+                SizedBox(height: 20),
+
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    LinearProgressIndicator(              
+                      value: passwordStrength,
+                      backgroundColor: Colors.grey[300],
+                      color: passwordBarColor(passwordStrength) //Colors.purple,
+                    ),
+                    Text(
+                      "Password Strength: ${passwordStrength*100}"
+                    ),
+                  ]
+                ),
+
+                SizedBox(height: 20),
+
                 Text(
                   'Choose your avatar!',
                   style: TextStyle(fontSize: 18, color: Colors.grey),),
-                  
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children:[
@@ -347,19 +454,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ],
                 ),
                 const SizedBox(height: 30),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    LinearProgressIndicator(              
-                      value: passwordStrength,
-                      backgroundColor: Colors.grey[300],
-                      color: passwordBarColor(passwordStrength) //Colors.purple,
-                    ),
-                    Text(
-                      "Password Strength: ${passwordStrength*100}"
-                    ),
-                  ]
-                ),
+                
                 
                 SizedBox(height: 20,),
                 // Submit Button w/ Loading Animation
@@ -375,7 +470,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                         )
                       : ElevatedButton(
-                          onPressed: _submitForm,
+                          onPressed: 
+                            _submitForm,
+                            
+                            
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.deepPurple,
                             shape: RoundedRectangleBorder(

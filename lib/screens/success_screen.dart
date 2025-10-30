@@ -110,7 +110,10 @@ class _SuccessScreenState extends State<SuccessScreen> {
                     totalRepeatCount: 1,
                   ),
 
-                  Image.network(avatar),
+                  Image.network(avatar,
+                    width: 100,
+                    height: 100
+                    ),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
