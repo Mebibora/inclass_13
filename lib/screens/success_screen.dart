@@ -29,6 +29,15 @@ class _SuccessScreenState extends State<SuccessScreen> {
     super.dispose();
   }
 
+  // Function for displaying badges
+  String displayBadge(String badge, bool badgeToggle){
+    if (badgeToggle == true){
+      return badge;
+    } else {
+      return 'assets/images/x4.png';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,8 +109,24 @@ class _SuccessScreenState extends State<SuccessScreen> {
                     ],
                     totalRepeatCount: 1,
                   ),
-                  
+
                   Image.network(avatar),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(displayBadge('assets/images/spmBadge.png', spmBadge),
+                      width: 50,
+                      height: 50,),
+                      Image.asset(displayBadge('assets/images/tebsBadge.png', tebsBadge),
+                      width: 50,
+                      height: 50,),
+                      Image.asset(displayBadge('assets/images/pcBadge.png', pcBadge),
+                      width: 50,
+                      height: 50),
+                      
+                    ]
+                  ),
 
                   const SizedBox(height: 20),
                   const Text(

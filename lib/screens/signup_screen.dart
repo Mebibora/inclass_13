@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'success_screen.dart'; // Import for navigation
 
+// global variables for displaying images in success_screen.dart
 String avatar = '';
+bool spmBadge = false;
+bool tebsBadge = true;
+bool pcBadge = true;
+
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
@@ -78,6 +83,25 @@ class _SignupScreenState extends State<SignupScreen> {
     else{
       return Colors.red;}
   }
+  
+  // Function to check the badge for a strong password
+  spmBadgetoggle() {
+    if (passwordStrength == 1) {
+      spmBadge = true;
+    } else{
+      spmBadge = false;
+    }
+  }
+
+  // Function to check the badge for signing up in the morning
+  tebsBadgetoggle() {
+    final currenttime = DateTime.now();
+    if (currenttime.hour < 12){
+      tebsBadge = true;
+    } 
+  }
+
+
   // Date Picker Function
   Future<void> _selectDate() async {
     DateTime? picked = await showDatePicker(
@@ -257,7 +281,10 @@ class _SignupScreenState extends State<SignupScreen> {
                   },
                 ),
                 
-                Text('Choose your avatar!'),
+                Text(
+                  'Choose your avatar!',
+                  style: TextStyle(fontSize: 18, color: Colors.grey),),
+                  
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children:[
